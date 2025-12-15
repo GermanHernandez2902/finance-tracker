@@ -1,0 +1,18 @@
+<!-- Título de la página para añadir un nuevo gasto -->
+<h1>Add Expense</h1>
+
+<!-- Formulario HTML para crear un gasto -->
+<!-- El método POST se usa para enviar datos de forma segura -->
+<form method="post">
+
+  <!-- Token de seguridad obligatorio en Django -->
+  <!-- Protege la aplicación contra ataques CSRF -->
+  {% csrf_token %}
+
+  <!-- Renderiza automáticamente el formulario Django -->
+  <!-- form.as_p muestra cada campo envuelto en un <p> -->
+  {{ form.as_p }}
+
+  <!-- Botón para enviar el formulario -->
+  <button type="submit">Save</button>
+</form>

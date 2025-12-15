@@ -1,0 +1,24 @@
+<!-- Título principal de la página -->
+<h1>My Expenses</h1>
+
+<!-- Enlace para acceder al formulario de creación de un nuevo gasto -->
+<!-- Se utiliza el nombre de la URL para no depender de rutas fijas -->
+<a href="{% url 'expense_create' %}">Add expense</a>
+
+<!-- Lista de gastos del usuario -->
+<ul>
+
+  <!-- Bucle que recorre todos los gastos enviados desde la vista -->
+  {% for expense in expenses %}
+    <li>
+
+      <!-- Muestra la fecha, el importe y la descripción del gasto -->
+      {{ expense.date }} - {{ expense.amount }} - {{ expense.description }}
+
+      <!-- Enlace para eliminar el gasto -->
+      <!-- Se pasa el id (pk) del gasto a la URL -->
+      <a href="{% url 'expense_delete' expense.id %}">Delete</a>
+    </li>
+  {% endfor %}
+
+</ul>
