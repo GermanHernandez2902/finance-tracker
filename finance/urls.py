@@ -20,4 +20,8 @@ urlpatterns = [
     # <int:pk> recibe el identificador del gasto desde la URL
     # Este valor se pasa a la vista expense_delete
     path("expenses/delete/<int:pk>/", views.expense_delete, name="expense_delete"),
+    # URL de la API que devuelve los gastos en formato JSON
+    # Esta ruta será consumida por el frontend en React
+    path("api/expenses/", views.expenses_api, name="expenses_api"),
+
 ]
