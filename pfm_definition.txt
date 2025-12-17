@@ -1,0 +1,44 @@
+📌 Nombre del proyecto
+
+FinanceTracker – Dashboard financiero personal
+
+📌 Problema
+
+En la actualidad, muchas personas, freelancers y pequeños negocios gestionan sus ingresos y gastos mediante hojas de cálculo, aplicaciones genéricas o incluso notas manuales.
+Estas soluciones suelen presentar problemas de organización, errores humanos, falta de control por usuario y dificultad para obtener una visión clara del estado financiero.
+
+La ausencia de una herramienta centralizada y segura dificulta la toma de decisiones financieras informadas y consume tiempo en tareas manuales repetitivas.
+
+📌 Usuarios
+
+Personas que desean llevar un control básico de sus finanzas personales.
+
+Freelancers que necesitan registrar ingresos y gastos de forma sencilla.
+
+Pequeños equipos o negocios que requieren visibilidad financiera sin complejidad contable.
+
+📌 Alcance del MVP
+
+La aplicación SÍ permite:
+
+Registro de usuarios con autenticación.
+
+Registro de ingresos y gastos asociados a cada usuario.
+
+Clasificación mediante categorías.
+
+Visualización de un resumen financiero básico (dashboard).
+
+Acceso seguro y aislamiento de datos por usuario.
+
+La aplicación NO incluye:
+
+Contabilidad avanzada.
+
+Gestión de impuestos.
+
+Multiempresa.
+
+Reportes financieros complejos.
+
+Integraciones externas.
