@@ -14,9 +14,10 @@ function App() {
   // El array de dependencias vacío [] indica que se ejecuta SOLO una vez
   useEffect(() => {
 
-    // Realizamos una petición HTTP al backend Django
-    // Este endpoint devuelve los gastos del usuario autenticado en formato JSON
-    fetch("http://127.0.0.1:8000/api/expenses/", {
+    // Petición al backend usando una ruta relativa
+    // El proxy de Vite se encarga de redirigirla a Django
+    // Esto evita URLs hardcodeadas y facilita el despliegue
+    fetch("/api/expenses/", {
 
       // credentials: "include" permite enviar las cookies de sesión
       // Es necesario porque Django usa autenticación basada en sesiones
