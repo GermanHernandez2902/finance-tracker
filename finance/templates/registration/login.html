@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+  <h1>Login</h1>
+
+  <!--
+    Este formulario es procesado automáticamente por Django
+    gracias a django.contrib.auth.views.LoginView
+  -->
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- Renderiza el formulario de login (usuario + contraseña) -->
+    {{ form.as_p }}
+
+    <button type="submit">Login</button>
+  </form>
+
+</body>
+</html>
