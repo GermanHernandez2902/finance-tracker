@@ -1,53 +1,62 @@
 // Importamos los hooks básicos de React
-// useState → manejar estado (datos dinámicos)
-// useEffect → ejecutar código al cargar el componente
+// useState: permite manejar estado dentro del componente
+// useEffect: permite ejecutar código cuando el componente se monta
 import { useEffect, useState } from "react";
 
 function App() {
 
-  // Estado que almacena la lista de gastos obtenidos del backend
-  // Inicialmente es un array vacío
+  // Definimos un estado llamado "expenses"
+  // Aquí se almacenará la lista de gastos obtenidos desde Django
+  // Se inicializa como un array vacío porque aún no hay datos cargados
   const [expenses, setExpenses] = useState([]);
 
-  // useEffect se ejecuta una sola vez cuando el componente se monta
+  // useEffect se ejecuta automáticamente cuando el componente se renderiza por primera vez
+  // El array de dependencias vacío [] indica que se ejecuta SOLO una vez
   useEffect(() => {
 
-    // Petición HTTP al backend Django
+    // Realizamos una petición HTTP al backend Django
+    // Este endpoint devuelve los gastos del usuario autenticado en formato JSON
     fetch("http://127.0.0.1:8000/api/expenses/", {
 
-      // Incluimos cookies de sesión para mantener la autenticación
-      // Necesario porque Django usa autenticación basada en sesión
+      // credentials: "include" permite enviar las cookies de sesión
+      // Es necesario porque Django usa autenticación basada en sesiones
       credentials: "include",
     })
 
-      // Convertimos la respuesta HTTP a formato JSON
+      // Convertimos la respuesta HTTP en un objeto JavaScript (JSON)
       .then((res) => res.json())
 
-      // Guardamos los datos recibidos en el estado expenses
+      // Guardamos los datos recibidos en el estado "expenses"
+      // Esto provoca que React vuelva a renderizar el componente
       .then((data) => setExpenses(data))
 
-      // Capturamos posibles errores de red o servidor
-      .catch((err) => console.error(err));
+      // Capturamos posibles errores de red o del servidor
+      // Esto evita fallos silenciosos y facilita el debugging
+      .catch((error) => {
+        console.error("Error fetching expenses:", error);
+      });
 
-  }, []); // Array vacío → solo se ejecuta al cargar la página
+  }, []);
 
   return (
-    <div>
+    // Contenedor principal con padding para mejorar la presentación visual
+    <div style={{ padding: "2rem" }}>
 
-      {/* Título principal */}
-      <h1>Expenses</h1>
+      {/* Título principal de la aplicación */}
+      <h1>Finance Tracker</h1>
 
       {/* Renderizado condicional */}
-      {/* Si no hay gastos, mostramos un mensaje */}
+      {/* Si el usuario no tiene gastos, mostramos un mensaje */}
       {expenses.length === 0 ? (
         <p>No expenses yet</p>
       ) : (
-        // Si hay gastos, los mostramos en una lista
+        // Si existen gastos, los mostramos en una lista
         <ul>
           {expenses.map((exp) => (
-            // key única requerida por React para optimizar renderizado
+            // React necesita una key única por cada elemento
+            // Usamos el id del gasto (pk del backend)
             <li key={exp.id}>
-              {exp.date} - {exp.amount} - {exp.description}
+              {exp.date} – ${exp.amount} – {exp.description}
             </li>
           ))}
         </ul>
