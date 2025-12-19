@@ -20,6 +20,11 @@ urlpatterns = [
     path("expenses/new/", views.expense_create, name="expense_create"),
     path("expenses/delete/<int:pk>/", views.expense_delete, name="expense_delete"),
 
+    # Ruta del dashboard principal
+    # Esta vista carga el frontend React
+    # Está protegida por autenticación en views.py
+    path("dashboard/", views.dashboard, name="dashboard"),
+
     # Rutas de la API consumidas por React
     path("api/expenses/", api_views.expenses_api, name="expenses_api"),
     path("api/incomes/", api_views.incomes_api, name="incomes_api"),

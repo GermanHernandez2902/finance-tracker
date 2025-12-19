@@ -79,3 +79,20 @@ def expense_delete(request, pk):
 
     # Redirigimos nuevamente a la lista de gastos
     return redirect("expense_list")
+
+# Vista que sirve el dashboard en React
+@login_required
+def dashboard(request):
+    # Esta vista está protegida por autenticación
+    # Solo usuarios con sesión activa pueden acceder
+
+    """
+    Vista protegida que carga el frontend React.
+    Django únicamente entrega el HTML base del dashboard,
+    mientras que React se encarga de toda la interfaz
+    y del consumo de la API.
+    """
+
+    # Renderizamos el template dashboard.html
+    # Este archivo actúa como puente entre Django y React
+    return render(request, "dashboard.html")
