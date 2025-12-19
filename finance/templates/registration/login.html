@@ -1,25 +1,50 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+
+    <!-- Título de la página -->
+    <title>Login | Finance-Tracker</title>
+
+    <!-- Cargamos los estilos globales -->
+    <link rel="stylesheet" href="{% static 'finance/style.css' %}">
 </head>
+
 <body>
 
-  <h1>Login</h1>
-
   <!--
-    Este formulario es procesado automáticamente por Django
-    gracias a django.contrib.auth.views.LoginView
+    auth-container:
+    - Ocupa toda la pantalla
+    - Centra el formulario horizontal y verticalmente
   -->
-  <form method="post">
-    {% csrf_token %}
+  <div class="auth-container">
 
-    <!-- Renderiza el formulario de login (usuario + contraseña) -->
-    {{ form.as_p }}
+    <!--
+      auth-card:
+      - Tarjeta visual del login
+      - Fondo oscuro + sombra premium
+    -->
+    <div class="auth-card">
 
-    <button type="submit">Login</button>
-  </form>
+      <!-- Título del formulario -->
+      <h1>Iniciar sesión</h1>
+
+      <!--
+        Formulario procesado por Django LoginView
+      -->
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Campos usuario y contraseña -->
+        {{ form.as_p }}
+
+        <!-- Botón submit -->
+        <button type="submit">Login</button>
+      </form>
+
+    </div>
+  </div>
 
 </body>
 </html>

@@ -1,60 +1,67 @@
 # Importa JsonResponse para devolver respuestas en formato JSON
-# Se utiliza para que el frontend (React) pueda consumir los datos
+# Permite que React consuma datos desde Django
 from django.http import JsonResponse
 
-# Decorador que obliga a que el usuario esté autenticado
-# Evita que usuarios no autorizados accedan a la API
-from django.contrib.auth.decorators import login_required
-
-# Importa los modelos Expense e Income para obtener datos del usuario
+# Importa los modelos necesarios
+# Expense e Income representan gastos e ingresos del usuario
 from .models import Expense, Income
 
 
-# Vista API que devuelve los gastos del usuario autenticado en formato JSON
-@login_required
+# Vista API que devuelve los gastos del usuario autenticado
 def expenses_api(request):
 
-    # Se filtran los gastos para que solo se obtengan los del usuario actual
-    # Esto garantiza que cada usuario vea solo su información
+    # Si el usuario no está autenticado, devolvemos error 401
+    if not request.user.is_authenticated:
+        return JsonResponse({"detail": "Not authenticated"}, status=401)
+
+    # Filtramos los gastos para obtener solo los del usuario actual
     expenses = Expense.objects.filter(user=request.user).values(
-        "id",          # Identificador único del gasto (pk)
-        "amount",      # Cantidad del gasto
-        "description", # Descripción del gasto
-        "date"         # Fecha del gasto
+        "id",          # Identificador único del gasto
+        "amount",      # Monto del gasto
+        "description", # Descripción
+        "date"         # Fecha
     )
 
-    # Se devuelve la lista de gastos como JSON
-    # safe=False permite devolver una lista de objetos
+    # Devolvemos la lista de gastos en formato JSON
     return JsonResponse(list(expenses), safe=False)
 
 
-# Vista API que devuelve los ingresos del usuario autenticado en formato JSON
-@login_required
+# Vista API que devuelve los ingresos del usuario autenticado
 def incomes_api(request):
 
-    # Se filtran los ingresos para que solo se obtengan los del usuario actual
+    # Verificamos si existe una sesión válida
+    if not request.user.is_authenticated:
+        return JsonResponse({"detail": "Not authenticated"}, status=401)
+
+    # Filtramos los ingresos del usuario actual
     incomes = Income.objects.filter(user=request.user).values(
         "id",          # Identificador único del ingreso
-        "amount",      # Cantidad del ingreso
-        "description", # Descripción del ingreso
-        "date"         # Fecha del ingreso
+        "amount",      # Monto del ingreso
+        "description", # Descripción
+        "date"         # Fecha
     )
 
-    # Se devuelve la lista de ingresos como JSON
+    # Devolvemos la lista de ingresos
     return JsonResponse(list(incomes), safe=False)
 
 
-# Vista API que devuelve información básica del usuario autenticado
-@login_required
+# Vista API que devuelve información básica del usuario
+# React la usa para saber si hay sesión activa
 def current_user(request):
 
-    # request.user representa al usuario autenticado por Django
-    # Si esta vista se ejecuta, significa que la sesión es válida
-    user = request.user
+    # Si NO hay usuario autenticado
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {
+                "authenticated": False
+            },
+            status=401
+        )
 
-    # Se devuelven solo los datos necesarios para el frontend
-    # React usa esto para mostrar el usuario y confirmar autenticación
-    return JsonResponse({
-        "username": user.username,
-        "authenticated": True
-    })
+    # Si hay sesión válida, devolvemos datos mínimos del usuario
+    return JsonResponse(
+        {
+            "authenticated": True,
+            "username": request.user.username
+        }
+    )

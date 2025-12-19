@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,91 +7,70 @@
   <!-- Título visible en la pestaña del navegador -->
   <title>Finance-Tracker | Proyecto Final</title>
 
-  <!-- Estilos simples para mantener una interfaz limpia -->
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f9fafb;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-    }
-
-    .buttons a {
-      display: inline-block;
-      margin-top: 20px;
-      margin-right: 10px;
-      padding: 10px 15px;
-      text-decoration: none;
-      background-color: #4f46e5;
-      color: white;
-      border-radius: 5px;
-    }
-
-    .buttons a.logout {
-      background-color: #dc2626;
-    }
-  </style>
+  <!-- Carga de estilos globales del proyecto -->
+  <link rel="stylesheet" href="{% static 'finance/style.css' %}">
 </head>
+
 <body>
 
-<div class="container">
+  <!-- Contenedor centrado vertical y horizontal -->
+  <div class="auth-container">
+    <div class="container">
 
-  <!-- Título del proyecto -->
-  <h1>Finance-Tracker</h1>
+      <!-- Título del proyecto -->
+      <h1>Finance-Tracker</h1>
 
-  <!-- Descripción general del proyecto -->
-  <p>
-    <strong>Finance-Tracker</strong> es una aplicación web diseñada para ayudar
-    a los usuarios a gestionar sus finanzas personales de forma clara y segura,
-    permitiendo el registro de ingresos y gastos y la visualización de un balance financiero.
-  </p>
-
-  <p>
-    El proyecto ha sido desarrollado como <strong>Proyecto Final del Máster en Desarrollo Full Stack</strong>,
-    integrando un backend en <strong>Django</strong> con autenticación basada en sesiones
-    y un frontend en <strong>React</strong> que consume datos a través de una API.
-  </p>
-
-  <p>
-    La aplicación prioriza la separación de responsabilidades, la seguridad del acceso
-    y una experiencia de usuario sencilla y comprensible.
-  </p>
-
-  <!-- Navegación basada en autenticación -->
-  <div class="buttons">
-
-    {% if user.is_authenticated %}
-      <!-- Usuario autenticado -->
-
+      <!-- Descripción principal del proyecto -->
       <p>
-        👤 Sesión activa: <strong>{{ user.username }}</strong>
+        <strong>Finance-Tracker</strong> es una aplicación web orientada a la
+        gestión de finanzas personales, diseñada para permitir a los usuarios
+        registrar ingresos y gastos, analizar su balance financiero y mantener
+        un control claro y estructurado de su economía.
       </p>
 
-      <!-- Enlace al dashboard real del sistema (React) -->
-      <a href="/dashboard/">Ir al Dashboard</a>
+      <p>
+        El sistema ha sido desarrollado como
+        <strong>Proyecto Final del Máster en Desarrollo Full Stack</strong>,
+        integrando un backend robusto en <strong>Django</strong> con autenticación
+        basada en sesiones y un frontend desacoplado en <strong>React</strong>
+        que consume los datos a través de una API.
+      </p>
 
-      <!-- Logout usando Django -->
-      <a href="/accounts/logout/" class="logout">Cerrar sesión</a>
+      <p>
+        La aplicación prioriza la seguridad del acceso, la separación de
+        responsabilidades entre frontend y backend, y una experiencia de
+        usuario clara, moderna y profesional.
+      </p>
 
-    {% else %}
-      <!-- Usuario NO autenticado -->
+      <!-- Navegación basada en autenticación -->
+      {% if user.is_authenticated %}
 
-      <p>🔐 Para acceder al dashboard es necesario iniciar sesión.</p>
+        <p class="auth-user">
+          👤 Sesión activa: <strong>{{ user.username }}</strong>
+        </p>
 
-      <!-- Login estándar de Django -->
-      <a href="/accounts/login/">Iniciar sesión</a>
-    {% endif %}
+        <a href="/dashboard/">Ir al Dashboard</a>
 
+        <form method="post" action="/accounts/logout/" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="logout">
+            Cerrar sesión
+          </button>
+        </form>
+
+      {% else %}
+
+        <p>
+          🔐 Para acceder al dashboard y a las funcionalidades del sistema
+          es necesario iniciar sesión.
+        </p>
+
+        <a href="/accounts/login/">Iniciar sesión</a>
+
+      {% endif %}
+
+    </div>
   </div>
-
-</div>
 
 </body>
 </html>
