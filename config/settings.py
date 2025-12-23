@@ -10,13 +10,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Clave secreta de Django
+# En producción se sobreescribe desde variables de entorno (Render)
 SECRET_KEY = "django-insecure-dev-key"
 
 # Modo desarrollo
+# En Render se pondrá DEBUG=False vía variable de entorno
 DEBUG = True
 
+
 # Hosts permitidos
-ALLOWED_HOSTS = []
+# Para deploy inicial en Render permitimos todos
+# Luego se puede restringir al dominio real
+ALLOWED_HOSTS = ["*"]
 
 
 # Aplicaciones instaladas
@@ -27,15 +32,26 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # Apps del proyecto
     "finance",
+
+    # CORS para conexión con React
     "corsheaders",
 ]
 
 
 # Middlewares
 MIDDLEWARE = [
+    # CORS debe ir arriba
     "corsheaders.middleware.CorsMiddleware",
+
+    # Seguridad
     "django.middleware.security.SecurityMiddleware",
+
+    # WhiteNoise para servir archivos estáticos en Render
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -53,7 +69,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+        # Django buscará templates dentro de cada app (finance/templates)
         "DIRS": [],
+
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -71,7 +90,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
-# BASE DE DATOS (ESTO ES LO QUE ESTABA FALLANDO)
+# BASE DE DATOS
+# SQLite funciona perfectamente en Render para PFM
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -96,32 +116,55 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Archivos estáticos
-STATIC_URL = "static/"
+
+# ARCHIVOS ESTÁTICOS
+
+
+# URL pública de archivos estáticos
+STATIC_URL = "/static/"
+
+# Carpeta donde Render recolecta los estáticos
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# WhiteNoise optimización
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # Clave primaria por defecto
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+
+# SESIONES
+
+
 # Sesiones en base de datos
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False  # En HTTPS real se puede poner True
+
 
 
 # CSRF
+
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False  # Render maneja HTTPS
 
 
-# CORS para React
+
+# CORS PARA REACT
+
 CORS_ALLOW_CREDENTIALS = True
+
+# Durante desarrollo y deploy inicial
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
+    "http://localhost:5173",
 ]
 
 
-# Redirecciones
+
+# REDIRECCIONES DE AUTH
+
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
