@@ -2,6 +2,5 @@ services:
   - type: web
     name: finance-tracker
     env: python
-    pythonVersion: "3.12"
     buildCommand: pip install -r requirements.txt
     startCommand: python manage.py migrate && gunicorn config.wsgi:application
