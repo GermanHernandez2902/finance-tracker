@@ -1,6 +1,11 @@
 """
 Django settings for config project.
 """
+# Permite leer variables de entorno
+import os
+
+# Permite configurar la base de datos desde DATABASE_URL
+import dj_database_url
 
 # Importamos Path para manejar rutas del sistema
 from pathlib import Path
@@ -90,14 +95,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
-# BASE DE DATOS
-# SQLite funciona perfectamente en Render para PFM
+# Base de datos
+# En producción usa PostgreSQL desde Render
+# En local usa SQLite si no hay DATABASE_URL
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
+
 
 
 # Validadores de contraseña
