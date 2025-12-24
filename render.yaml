@@ -1,12 +1,7 @@
 services:
   - type: web
-    name: finance-tracker-backend
+    name: finance-tracker
     env: python
-
+    runtime: python-3.12.4
     buildCommand: pip install -r requirements.txt
-
-    startCommand: gunicorn config.wsgi:application
-
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: config.settings
+    startCommand: python manage.py migrate && gunicorn config.wsgi:application
