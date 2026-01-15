@@ -1,6 +1,7 @@
 """
 Django settings for config project.
 """
+
 # Permite leer variables de entorno
 import os
 
@@ -16,16 +17,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Clave secreta de Django
 # En producción se sobreescribe desde variables de entorno (Render)
-SECRET_KEY = "django-insecure-dev-key"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-dev-key")
 
-# Modo desarrollo
-# En Render se pondrá DEBUG=False vía variable de entorno
-DEBUG = True
+
+# DEBUG controlado por variable de entorno
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 # Hosts permitidos
-# Para deploy inicial en Render permitimos todos
-# Luego se puede restringir al dominio real
 ALLOWED_HOSTS = ["*"]
 
 
@@ -38,23 +37,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Apps del proyecto
+    # App principal
     "finance",
-
-    # CORS para conexión con React
-    "corsheaders",
 ]
 
 
 # Middlewares
 MIDDLEWARE = [
-    # CORS debe ir arriba
-    "corsheaders.middleware.CorsMiddleware",
-
-    # Seguridad
     "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise para servir archivos estáticos en Render
+    # WhiteNoise para servir React build
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -75,8 +67,9 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
 
-        # Django buscará templates dentro de cada app (finance/templates)
-        "DIRS": [],
+        # Aquí Django encontrará el index.html de React
+        # React build está en: static/frontend/index.html
+        "DIRS": [BASE_DIR / "static" / "frontend"],
 
         "APP_DIRS": True,
         "OPTIONS": {
@@ -96,14 +89,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Base de datos
-# En producción usa PostgreSQL desde Render
-# En local usa SQLite si no hay DATABASE_URL
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
     )
 }
-
 
 
 # Validadores de contraseña
@@ -122,17 +113,16 @@ USE_I18N = True
 USE_TZ = True
 
 
+# ARCHIVOS ESTÁTICOS (React + Django)
 
-# ARCHIVOS ESTÁTICOS
-
-
-# URL pública de archivos estáticos
 STATIC_URL = "/static/"
-
-# Carpeta donde Render recolecta los estáticos
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# WhiteNoise optimización
+# Aquí están los assets generados por Vite (static/frontend/assets)
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
@@ -140,37 +130,24 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# SESIONES (mismo dominio → cookies OK)
 
-# SESIONES
-
-
-# Sesiones en base de datos
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = False  # En HTTPS real se puede poner True
-
+SESSION_COOKIE_SECURE = True
 
 
 # CSRF
 
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = False  # Render maneja HTTPS
+CSRF_COOKIE_SECURE = True
 
-
-
-# CORS PARA REACT
-
-CORS_ALLOW_CREDENTIALS = True
-
-# Durante desarrollo y deploy inicial
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
+CSRF_TRUSTED_ORIGINS = [
+    "https://finance-tracker-jl22.onrender.com",
 ]
 
 
-
-# REDIRECCIONES DE AUTH
+# REDIRECCIONES AUTH
 
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"

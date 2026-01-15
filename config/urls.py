@@ -2,27 +2,26 @@
 URL configuration for config project.
 """
 
-# Importa el panel de administración de Django
 from django.contrib import admin
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 
-# Importa las funciones necesarias para definir rutas y enlazar otras apps
-from django.urls import path, include
-
-
-# URLs principales del proyecto
 urlpatterns = [
-
-    # Ruta del panel de administración de Django
+    # Panel de administración
     path("admin/", admin.site.urls),
 
-    # Rutas de autenticación proporcionadas por Django
-    # Incluye login, logout, cambio y reseteo de contraseña
+    # Autenticación Django (login, logout, etc.)
     path("accounts/", include("django.contrib.auth.urls")),
 
-    # Incluye todas las URLs de la aplicación finance
-    # finance controla:
-    # - Landing page (/)
-    # - Vistas HTML
-    # - Endpoints API consumidos por React
-    path("", include("finance.urls")),
+    # APIs y vistas backend
+    path("api/", include("finance.urls")),
+
+    # React frontend (catch-all)
+    # Cualquier ruta que NO sea admin, accounts o api
+    # devuelve el index.html de React
+    re_path(
+        r"^(?!admin|accounts|api).*",
+        TemplateView.as_view(template_name="frontend/index.html"),
+        name="react-app",
+    ),
 ]
