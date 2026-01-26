@@ -1,43 +1,25 @@
-# Importamos FileResponse para servir archivos estáticos
-from django.http import FileResponse
+# Importamos render para devolver templates HTML
+from django.shortcuts import render, redirect
 
-# Importamos Path para manejar rutas del sistema
-from pathlib import Path
-
-# Importamos redirect
-from django.shortcuts import redirect
-
-# Importamos login_required
+# Importamos login_required para proteger vistas
 from django.contrib.auth.decorators import login_required
 
 
 # Vista raíz del proyecto
 def landing(request):
     """
-    Sirve directamente el index.html generado por React (Vite build).
+    Página pública de inicio del proyecto.
+    Renderiza el template Django landing.html.
     """
-    react_index_path = (
-        Path(__file__).resolve().parent.parent
-        / "static"
-        / "frontend"
-        / "index.html"
-    )
-
-    return FileResponse(open(react_index_path, "rb"))
+    return render(request, "landing.html")
 
 
-# Vista del dashboard (React)
+# Vista del dashboard (protegida)
 @login_required
 def dashboard(request):
     """
-    Sirve el mismo index.html de React.
-    React se encarga del routing interno.
+    Punto de entrada al dashboard.
+    Por ahora renderiza una vista Django.
+    React se integrará después como frontend separado.
     """
-    react_index_path = (
-        Path(__file__).resolve().parent.parent
-        / "static"
-        / "frontend"
-        / "index.html"
-    )
-
-    return FileResponse(open(react_index_path, "rb"))
+    return render(request, "dashboard.html")
