@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise para servir React build
+    # WhiteNoise para servir archivos estáticos en producción
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -62,16 +62,17 @@ MIDDLEWARE = [
 ROOT_URLCONF = "config.urls"
 
 
-# Templates
+# Templates (solo Django)
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
 
-        # Aquí Django encontrará el index.html de React
-        # React build está en: static/frontend/index.html
-        "DIRS": [BASE_DIR / "static" / "frontend"],
+        # No incluimos React aquí
+        "DIRS": [],
 
+        # Permite buscar templates dentro de cada app (finance/templates)
         "APP_DIRS": True,
+
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -113,12 +114,11 @@ USE_I18N = True
 USE_TZ = True
 
 
-# ARCHIVOS ESTÁTICOS (React + Django)
-
+# Archivos estáticos (Django + React build)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Aquí están los assets generados por Vite (static/frontend/assets)
+# Carpeta donde viven los assets generados por Vite y los CSS del proyecto
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -130,15 +130,13 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# SESIONES (mismo dominio → cookies OK)
-
+# Configuración de sesiones
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
 
 
-# CSRF
-
+# Configuración CSRF
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = True
 
@@ -147,7 +145,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-# REDIRECCIONES AUTH
-
+# Redirecciones de autenticación
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
