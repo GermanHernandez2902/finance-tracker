@@ -11,17 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Clave secreta de Django
-# En producción se sobreescribe desde variables de entorno (Render)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-dev-key")
 
 
-# DEBUG controlado por variable de entorno
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG FORZADO TEMPORALMENTE PARA VER EL ERROR 500
+DEBUG = True
 
 
 # Hosts permitidos
 ALLOWED_HOSTS = [
     "finance-tracker-jl22.onrender.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 
@@ -57,15 +58,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = "config.urls"
 
 
-# Templates (solo Django)
+# Templates
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-
         "DIRS": [],
-
         "APP_DIRS": True,
-
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -122,13 +120,13 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# Configuración de sesiones
+# Sesiones
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
 
 
-# Configuración CSRF
+# CSRF
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = True
 
@@ -137,7 +135,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-# Necesario para HTTPS en Render
+# HTTPS en Render
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
