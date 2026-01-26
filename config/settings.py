@@ -2,13 +2,8 @@
 Django settings for config project.
 """
 
-# Permite leer variables de entorno
 import os
-
-# Permite configurar la base de datos desde DATABASE_URL
 import dj_database_url
-
-# Importamos Path para manejar rutas del sistema
 from pathlib import Path
 
 # BASE_DIR representa la raíz del proyecto
@@ -25,7 +20,9 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 # Hosts permitidos
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "finance-tracker-jl22.onrender.com",
+]
 
 
 # Aplicaciones instaladas
@@ -37,7 +34,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # App principal
     "finance",
 ]
 
@@ -46,7 +42,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise para servir archivos estáticos en producción
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -67,10 +62,8 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
 
-        # No incluimos React aquí
         "DIRS": [],
 
-        # Permite buscar templates dentro de cada app (finance/templates)
         "APP_DIRS": True,
 
         "OPTIONS": {
@@ -114,11 +107,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Archivos estáticos (Django + React build)
+# Archivos estáticos
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Carpeta donde viven los assets generados por Vite y los CSS del proyecto
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -143,6 +135,10 @@ CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     "https://finance-tracker-jl22.onrender.com",
 ]
+
+
+# Necesario para HTTPS en Render
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Redirecciones de autenticación
