@@ -57,23 +57,6 @@ El sistema sigue una **arquitectura desacoplada frontend/backend**:
 - **Consumo de API:** Fetch API con cookies (`credentials: include`)  
 - **Build de producción:** servido como archivos estáticos por Django  
 
----
-
-## 📁 Estructura del proyecto
-
-finance-tracker/
-├── config/ # Configuración principal de Django
-├── finance/ # App principal (modelos, vistas, API)
-├── static/ # Archivos estáticos (build de React)
-│ └── frontend/
-│ ├── index.html
-│ └── assets/
-├── staticfiles/ # Archivos recolectados para producción
-├── templates/ # Templates Django
-├── manage.py
-├── requirements.txt
-└── README.md
-
 
 ---
 
@@ -119,6 +102,3 @@ Proyecto Final – Máster en Desarrollo Full Stack
 
 ---
 
-## 📄 Licencia
-
-Proyecto desarrollado con fines académicos.
