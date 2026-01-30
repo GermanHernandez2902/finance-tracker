@@ -94,7 +94,78 @@ Este proyecto fue desarrollado como **Proyecto Final del Máster en Desarrollo F
 - Arquitectura limpia y escalable
 
 ---
+⚙️ Instalación y ejecución en local
 
+Este proyecto está estructurado con un backend en Django que sirve directamente el frontend React ya compilado como archivos estáticos.
+
+🔎 Importante:
+El repositorio no incluye el código fuente del frontend React, únicamente el build final (dist) integrado dentro del backend.
+Por lo tanto, no es necesario ni posible ejecutar React en local desde este repositorio.
+
+📋 Requisitos previos
+
+Python 3.10 o superior
+
+Conda (Anaconda o Miniconda)
+
+Git
+
+📥 Clonar el repositorio
+git clone https://github.com/GermanHernandez2902/finance-tracker.git
+cd finance-tracker
+
+🐍 Backend (Django)
+
+El backend se ejecuta utilizando un entorno Conda.
+
+Crear el entorno (si no existe):
+
+conda create -n finance-tracker python=3.10
+
+
+Activar el entorno:
+
+conda activate finance-tracker
+
+
+Instalar dependencias:
+
+pip install -r requirements.txt
+
+
+Ejecutar migraciones:
+
+python manage.py migrate
+
+
+Iniciar el servidor:
+
+python manage.py runserver
+
+🌐 Acceso a la aplicación
+
+Una vez iniciado el servidor, la aplicación completa estará disponible en:
+
+http://127.0.0.1:8000/
+
+
+Django servirá automáticamente el frontend React desde:
+
+finance-tracker/static/frontend/
+
+⚛️ Nota sobre el frontend (React)
+
+Durante la fase de desarrollo:
+
+El backend Django se ejecutaba en una terminal utilizando Conda
+
+El frontend React se desarrolló y ejecutó en una terminal separada utilizando pnpm
+
+Para producción, el frontend fue compilado (pnpm build) y el resultado (dist) se integró manualmente dentro del backend
+
+Este enfoque refleja un flujo profesional real de integración Full Stack, donde el frontend desacoplado se entrega finalmente como build estático.
+
+---
 ## 👤 Autor
 
 **German Hernández Sarmiento**  
