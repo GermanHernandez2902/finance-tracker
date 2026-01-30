@@ -94,11 +94,11 @@ Este proyecto fue desarrollado como **Proyecto Final del Máster en Desarrollo F
 - Arquitectura limpia y escalable
 
 ---
-⚙️ Instalación y ejecución en local
+## ⚙️ Instalación y ejecución en local
 
 Este proyecto está estructurado con un backend en Django que sirve directamente el frontend React ya compilado como archivos estáticos.
 
-🔎 Importante:
+🔎 Importante
 El repositorio no incluye el código fuente del frontend React, únicamente el build final (dist) integrado dentro del backend.
 Por lo tanto, no es necesario ni posible ejecutar React en local desde este repositorio.
 
@@ -163,7 +163,8 @@ El frontend React se desarrolló y ejecutó en una terminal separada utilizando 
 
 Para producción, el frontend fue compilado (pnpm build) y el resultado (dist) se integró manualmente dentro del backend
 
-Este enfoque refleja un flujo profesional real de integración Full Stack, donde el frontend desacoplado se entrega finalmente como build estático.
+Este enfoque refleja un flujo profesional real de integración Full Stack, donde el frontend desacoplado se entrega finalmente como build estático servido por Django.
+
 
 ---
 ## 👤 Autor
